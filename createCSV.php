@@ -1,6 +1,6 @@
 
 <?php
-    // generate the names
+    // generate names
     // for ($i = 0; $i < 400; $i++){
     //     $employeelist[$i] = 
     //         $givenName[rand( 0 , count($givenName) -1)] . ' ' . $surName[rand( 0 , count($surName) -1)];
