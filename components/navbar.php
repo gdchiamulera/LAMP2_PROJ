@@ -1,4 +1,5 @@
 <?php
+
 	$currentUrl = $_SERVER['REQUEST_URI'];
 	$navbar =
 	'
@@ -12,17 +13,15 @@
 									
 	';
 	// check the url to insert the class active on the right link
-	if (!strpos($currentUrl, '/login.php')) {
+	if (!strpos($currentUrl, '/index.php')) {
 			
 			$navbar .= '<a class="nav-link active" href="./index.php">Home</a>';
 			$navbar .= '<a class="nav-link" href="./login.php">Login</a>';
 	} else {
 			$navbar .= '<a class="nav-link" href="./index.php">Home</a>';
 			$navbar .= '<a class="nav-link active" href="./login.php">Login</a>';
+			$navbar .=  '<a class="nav-link" href="./logout.php">Logout</a>';
 	}
-	
-	// add logic to alternet the logout button when need	
-	// $navbar = $navbar . '<a class="nav-link" href="./login.php">Logout</a>';
 	
 	$navbar .= '
 				</div>
