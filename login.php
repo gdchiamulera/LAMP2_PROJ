@@ -41,34 +41,15 @@
 										<input type="password" class="form-control" id="txt-password">                        
 								</div>
 								<hr>
-								<button class="btn btn-block btn-light">Login</button>
+								<button class="btn btn-block btn-light" id="btn-login">Login</button>
             </div>
         </div>
     </div>    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <script>        
-        $('.btn-edit, .btn-create').on('click', function (e) {  
-            
-            
-            if ($(this).hasClass('btn-create')) {
-                alert('create new employee');
-            } else {
-                alert('edit employee');
-                // id of the table
-                console.log($(this).attr('data-id-table'));
-            }
-            
-            // populate or get value of the fields
-            $('#txt-surname').val('Dummy surname');
-            $('#txt-given-name').val('Dummy givem name');
-            // data must be yyyy-mm-dd
-            $('#txt-date-of-birth').val('1985-07-07');
-            $('#drop-gender').val('M');
-            // data must be yyyy-mm-dd
-            $('#txt-hire-date').val('1985-07-07');
-            $('#txt-initial-level').val(5);
-            $('#employee-data').modal('show');
+        $('#btn-login').on('click', function (e) {  
+            alert('Login Action');
             e.preventDefault();            
         });
     </script>
