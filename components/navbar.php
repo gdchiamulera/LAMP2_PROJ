@@ -1,5 +1,6 @@
 <?php
 
+	
 	$currentUrl = $_SERVER['REQUEST_URI'];
 	$navbar =
 	'
@@ -17,12 +18,18 @@
 			
 			$navbar .= '<a class="nav-link active" href="./index.php">Home</a>';
 			$navbar .= '<a class="nav-link" href="./login.php">Login</a>';
+			$navbar .=  '<a class="nav-link" href="./logout.php">Logout</a>';
+
 	} else {
 			$navbar .= '<a class="nav-link" href="./index.php">Home</a>';
 			$navbar .= '<a class="nav-link active" href="./login.php">Login</a>';
 			$navbar .=  '<a class="nav-link" href="./logout.php">Logout</a>';
+			if (!empty($_SESSION['userid']))
+				{
+					$navbar .= '<span class="navbar-text">Hi, ' . $_SESSION['userid'] . '</span>';
+				}
 	}
-	
+
 	$navbar .= '
 				</div>
 			</div>
