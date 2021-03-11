@@ -14,11 +14,13 @@
             margin-top: 10px;
         }
     </style>
+   
 </head>
 <body>
     <?php
         // navigation menu
         require_once('./components/navbar.php');
+        
     ?>
     <div class="container">
         <div class="row justify-content-center">
@@ -61,10 +63,10 @@
                         </thead>
                         <tbody>
                             <?php
-                                $conn = mysqli_connect("localhost", "root", "", "hr_db");
+                                $conn = mysqli_connect("localhost", "root", "!Lamp2!", "hr_db");
 
                                 // Display uploaded data
-                                $sqlSelect = "SELECT * from hr_employees";
+                                $sqlSelect = "SELECT * from hr_employees ORDER BY hr_id DESC";
                                 
                                 $result = mysqli_query($conn, $sqlSelect);
                                 
@@ -117,69 +119,104 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="txt-surname">Surname</label>
-                        <input type="text" class="form-control" id="txt-surname" aria-describedby="surname">                        
+                <form method="POST" id="modalForm">
+                    <div class="modal-body">
+                
+                        <div class="form-group">
+                            <label for="txt-surname">Surname</label>
+                            <input type="text" class="form-control" id="txt-surname" name="txt-surname" aria-describedby="surname">                        
+                        </div>
+                        <div class="form-group">
+                            <label for="txt-given-name">Given Name</label>
+                            <input type="text" class="form-control" id="txt-given-name" name="txt-given-name" aria-describedby="given-name">                        
+                        </div>
+                        <div class="form-group">
+                            <label for="txt-date-of-birth">Date of Birth</label>
+                            <input type="date" class="form-control" id="txt-date-of-birth" name="txt-date-of-birth" aria-describedby="date-of-birth">                        
+                        </div>
+                        <div class="form-group">
+                            <label for="drop-gender">Gender</label>
+                            <select id="drop-gender" name="drop-gender" class="form-control">
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                            </select>                        
+                        </div>
+                        <div class="form-group">
+                            <label for="txt-hire-data">Hire Date</label>
+                            <input type="date" class="form-control" id="txt-hire-date" name="txt-hire-date" aria-describedby="hire-date">                        
+                        </div>
+                        <div class="form-group">
+                            <label for="txt-initial-level">Initial Level</label>
+                            <input type="number" class="form-control" id="txt-initial-level" name="txt-initial-level"  aria-describedby="initial-level">                        
+                        </div>
+                        
                     </div>
-                    <div class="form-group">
-                        <label for="txt-given-name">Given Name</label>
-                        <input type="text" class="form-control" id="txt-given-name" aria-describedby="given-name">                        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary"></input>
                     </div>
-                    <div class="form-group">
-                        <label for="txt-date-of-birth">Date of Birth</label>
-                        <input type="date" class="form-control" id="txt-date-of-birth" aria-describedby="date-of-birth">                        
-                    </div>
-                    <div class="form-group">
-                        <label for="drop-gender">Date of Birth</label>
-                        <select id="drop-gender" class="form-control">
-                            <option value="F">Female</option>
-                            <option value="M">Male</option>
-                        </select>                        
-                    </div>
-                    <div class="form-group">
-                        <label for="txt-hire-data">Hire Date</label>
-                        <input type="date" class="form-control" id="txt-hire-date" aria-describedby="hire-date">                        
-                    </div>
-                    <div class="form-group">
-                        <label for="txt-initial-level">Initial Level</label>
-                        <input type="number" class="form-control" id="txt-initial-level" aria-describedby="initial-level">                        
-                    </div>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    
     <script>        
         $('.btn-edit, .btn-create').on('click', function (e) {  
             
             
             if ($(this).hasClass('btn-create')) {
                 alert('create new employee');
+                 // populate or get value of the fields
+                $('#txt-surname').val('Dummy surname');
+                $('#txt-given-name').val('Dummy givem name');
+                // data must be yyyy-mm-dd
+                $('#txt-date-of-birth').val('1985-07-07');
+                $('#drop-gender').val('M');
+                // data must be yyyy-mm-dd
+                $('#txt-hire-date').val('1985-07-07');
+                $('#txt-initial-level').val(5);
+                $('#employee-data').modal('show');
+                e.preventDefault(); 
+
             } else {
                 alert('edit employee');
                 // id of the table
                 console.log($(this).attr('data-id-table'));
+
+                
+    
+            }
+           
+        });
+
+       
+        $("#modalForm").submit( function(event){
+		$.post("ajax.php", $(this).serialize(), onNewPost); 
+		$('#employee-data').modal('hide');
+		event.preventDefault();	 
+	    });
+
+        var onNewPost = function (response){
+            
+            if (response.status == "None") {
+                console.log(response);
+            } else {
+                if (response.status == "OK"){
+                    console.log(response);
+                }
             }
             
-            // populate or get value of the fields
-            $('#txt-surname').val('Dummy surname');
-            $('#txt-given-name').val('Dummy givem name');
-            // data must be yyyy-mm-dd
-            $('#txt-date-of-birth').val('1985-07-07');
-            $('#drop-gender').val('M');
-            // data must be yyyy-mm-dd
-            $('#txt-hire-date').val('1985-07-07');
-            $('#txt-initial-level').val(5);
-            $('#employee-data').modal('show');
-            e.preventDefault();            
-        });
+        };
+
+        $.get("ajax.php", onNewPost);
+
+     
+        
+
+              
     </script>
 </body>
 </html>

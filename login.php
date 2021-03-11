@@ -7,7 +7,7 @@ $error = '';
 
 if (isset($_POST['login']))
 {
-	$mysqli = mysqli_connect("localhost", "root", "", "hr_db");
+	$mysqli = mysqli_connect("localhost", "root", "!Lamp2!", "hr_db");
 
 	if ($mysqli->connect_errno) {
 		echo "Failed to connect to MySQL: (" . 

@@ -36,6 +36,7 @@
 				margin-top: 10px;
 		}
 	</style>
+
 </head>
 <body>
 		<?php
@@ -45,19 +46,27 @@
 		<div class="container">
         <div class="row justify-content-center mt-10">
             <div class="col-6">
-							<h2 class="text-center">LAMP 2 - Project - Part 2</h2>
-              <form action="./createCSV.php" method="post">
-										<button type="submit" class="btn btn-light btn-block">Create CSV File</button>
-							</form>
-							<hr>
-							<form action="./import.php" method="post" enctype="multipart/form-data">
-								<input class="form-control" type="file" name="file" id="formFile" accept=".csv"> <br>
-								<button type="submit" name="submit" class="btn btn-lightt btn-block">Upload CSV File</button>
-							</form>
-							<hr>
-							<form action="./output.php" method="post" enctype="multipart/form-data">
-									<button type="submit" name="output" class="btn btn-light btn-block">Get data</button>
-							</form>
+							
+							
+				<h2 class="text-center">LAMP 2 - Project - Part 2</h2>
+              	<form action="./createCSV.php" method="post">
+					<button type="submit" class="btn btn-light btn-block">Create CSV File</button>
+				</form>
+				
+				<hr>
+				
+				<form action="./import.php" method="post" enctype="multipart/form-data">
+					<input class="form-control" type="file" name="file" id="formFile" accept=".csv"> <br>
+					<button type="submit" name="submit" class="btn btn-lightt btn-block">Upload CSV File</button>
+				</form>
+				
+				<hr>
+				
+				<form action="./output.php" method="post" enctype="multipart/form-data">
+					<button type="submit" name="output" class="btn btn-light btn-block">Get data</button>
+				</form>
+				
+				
 							<?php
 								if ($fileCreated) {
 									echo '<p class="bg-success text-center">File Created with succes</p>';
