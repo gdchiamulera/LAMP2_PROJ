@@ -14,15 +14,15 @@
 									
 	';
 	// check the url to insert the class active on the right link
-	if (!strpos($currentUrl, '/index.php')) {
+	if (!strpos($currentUrl, '/home.php')) {
 			
-			$navbar .= '<a class="nav-link active" href="./index.php">Home</a>';
-			$navbar .= '<a class="nav-link" href="./login.php">Login</a>';
+			$navbar .= '<a class="nav-link active" href="./home.php">Home</a>';
+			$navbar .= '<a class="nav-link" href="./index.php">Login</a>';
 			$navbar .=  '<a class="nav-link" href="./logout.php">Logout</a>';
 
 	} else {
-			$navbar .= '<a class="nav-link" href="./index.php">Home</a>';
-			$navbar .= '<a class="nav-link active" href="./login.php">Login</a>';
+			$navbar .= '<a class="nav-link" href="./home.php">Home</a>';
+			$navbar .= '<a class="nav-link active" href="./index.php">Login</a>';
 			$navbar .=  '<a class="nav-link" href="./logout.php">Logout</a>';
 			if (!empty($_SESSION['userid']))
 				{

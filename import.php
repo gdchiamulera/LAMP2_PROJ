@@ -1,6 +1,6 @@
 <?php
 
-$conn = mysqli_connect("localhost", "root", "!Lamp2!", "hr_db");
+$conn = mysqli_connect("localhost", "root", "", "hr_db");
 
 if(isset($_POST["submit"])){
 

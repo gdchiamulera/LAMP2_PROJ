@@ -63,7 +63,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $conn = mysqli_connect("localhost", "root", "!Lamp2!", "hr_db");
+                                $conn = mysqli_connect("localhost", "root", "", "hr_db");
 
                                 // Display uploaded data
                                 $sqlSelect = "SELECT * from hr_employees ORDER BY hr_id DESC";
@@ -211,9 +211,7 @@
             
         };
 
-        $.get("ajax.php", onNewPost);
-
-     
+        $.get("ajax.php", onNewPost);   
         
 
               
