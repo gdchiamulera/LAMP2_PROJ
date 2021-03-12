@@ -1,3 +1,14 @@
+<?php
+    session_start();
+
+    if (!empty($_SESSION['userid'])) {
+        $userid=$_SESSION['userid'];
+    } else {
+        header("Location: index.php");
+        die();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +23,19 @@
         }
         .mt-10 {
             margin-top: 10px;
+        }
+        /* animation to display slide */
+        .hide-element {
+            display: none;
+            transform: translateX(-3rem);
+            opacity: 0;
+            transition: all 0.5s ease-out;
+        }
+
+        .show-element {
+            display: block!important;
+            transform: translateX(0)!important;
+            opacity: 1!important;
         }
     </style>
    
@@ -41,11 +65,11 @@
                 </div>
 
                 <!-- hide and show when needed -->
-                <div class="alert alert-success" role="alert">
+                <div id="msg-success" class="alert alert-success hide-element" role="alert">
                     Success message
                 </div>
-                <div class="alert alert-danger" role="alert">
-                    Error Message
+                <div id="msg-error" class="alert alert-danger hide-element" role="alert">
+                    Something went wrong, please try again later!
                 </div>
                 <div>
                     <table class="table table-striped">
@@ -61,7 +85,7 @@
                                 <th class="border-style">Initial Level</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="data-table-user">
                             <?php
                                 $conn = mysqli_connect("localhost", "root", "", "hr_db");
 
@@ -74,7 +98,7 @@
                                     while ($row = mysqli_fetch_array($result)) {
                             ?>
                             
-                                    <tr>
+                                    <tr id="<?php echo $row['hr_id'];?>">
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-edit" data-id-table="<?php echo $row['hr_id'];?>">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
@@ -119,43 +143,46 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="POST" id="modalForm">
-                    <div class="modal-body">
-                
-                        <div class="form-group">
-                            <label for="txt-surname">Surname</label>
-                            <input type="text" class="form-control" id="txt-surname" name="txt-surname" aria-describedby="surname">                        
-                        </div>
-                        <div class="form-group">
-                            <label for="txt-given-name">Given Name</label>
-                            <input type="text" class="form-control" id="txt-given-name" name="txt-given-name" aria-describedby="given-name">                        
-                        </div>
-                        <div class="form-group">
-                            <label for="txt-date-of-birth">Date of Birth</label>
-                            <input type="date" class="form-control" id="txt-date-of-birth" name="txt-date-of-birth" aria-describedby="date-of-birth">                        
-                        </div>
-                        <div class="form-group">
-                            <label for="drop-gender">Gender</label>
-                            <select id="drop-gender" name="drop-gender" class="form-control">
-                                <option value="F">Female</option>
-                                <option value="M">Male</option>
-                            </select>                        
-                        </div>
-                        <div class="form-group">
-                            <label for="txt-hire-data">Hire Date</label>
-                            <input type="date" class="form-control" id="txt-hire-date" name="txt-hire-date" aria-describedby="hire-date">                        
-                        </div>
-                        <div class="form-group">
-                            <label for="txt-initial-level">Initial Level</label>
-                            <input type="number" class="form-control" id="txt-initial-level" name="txt-initial-level"  aria-describedby="initial-level">                        
-                        </div>
-                        
+                <div class="modal-body">
+                    <div id="msg-success-modal" class="alert alert-success hide-element" role="alert">
+                        Success message
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary"></input>
+                    <div id="msg-error-modal" class="alert alert-danger hide-element" role="alert">
+                        Something went wrong, please try again later!
                     </div>
-                </form>
+                    <div class="form-group">
+                        <label for="txt-surname">Surname</label>
+                        <input type="text" class="form-control" id="txt-surname" name="txt-surname" aria-describedby="surname">                        
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-given-name">Given Name</label>
+                        <input type="text" class="form-control" id="txt-given-name" name="txt-given-name" aria-describedby="given-name">                        
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-date-of-birth">Date of Birth</label>
+                        <input type="date" class="form-control" id="txt-date-of-birth" name="txt-date-of-birth" aria-describedby="date-of-birth">                        
+                    </div>
+                    <div class="form-group">
+                        <label for="drop-gender">Gender</label>
+                        <select id="drop-gender" name="drop-gender" class="form-control">
+                            <option value="F">Female</option>
+                            <option value="M">Male</option>
+                        </select>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-hire-data">Hire Date</label>
+                        <input type="date" class="form-control" id="txt-hire-date" name="txt-hire-date" aria-describedby="hire-date">                        
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-initial-level">Initial Level</label>
+                        <input type="number" class="form-control" id="txt-initial-level" name="txt-initial-level"  aria-describedby="initial-level">                        
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit">Submit</button>
+                </div>
             </div>
         </div>
     </div>
@@ -163,58 +190,183 @@
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     
-    <script>        
-        $('.btn-edit, .btn-create').on('click', function (e) {  
-            
-            
-            if ($(this).hasClass('btn-create')) {
-                alert('create new employee');
-                 // populate or get value of the fields
-                $('#txt-surname').val('Dummy surname');
-                $('#txt-given-name').val('Dummy givem name');
-                // data must be yyyy-mm-dd
-                $('#txt-date-of-birth').val('1985-07-07');
-                $('#drop-gender').val('M');
-                // data must be yyyy-mm-dd
-                $('#txt-hire-date').val('1985-07-07');
-                $('#txt-initial-level').val(5);
+    <script>
+        function showElement(elementSelector) {
+            const element = document.getElementById(elementSelector);
+
+            element.style.display = 'block';
+            setTimeout(function () {
+                element.classList.add('show-element');
+            }, 10);
+        }
+
+        function hideElement(elementSelector) {
+            const element = document.getElementById(elementSelector);            
+            element.style.display = 'none';
+
+            setTimeout(function () {
+                element.classList.remove('show-element');
+            }, 10);
+        }
+
+        function clearFields () {
+            $('#txt-surname').val('');
+            $('#txt-given-name').val('');
+            // data must be yyyy-mm-dd
+            $('#txt-date-of-birth').val('');
+            $('#drop-gender').val('F');
+            // data must be yyyy-mm-dd
+            $('#txt-hire-date').val('');
+            $('#txt-initial-level').val('');
+        }
+
+        function createUpdateUser (e) {
+            hideElement('msg-error-modal');
+            // check if is a new user
+            if ($(this).hasClass('btn-create')) {               
+                clearFields();                
                 $('#employee-data').modal('show');
-                e.preventDefault(); 
-
             } else {
-                alert('edit employee');
-                // id of the table
-                console.log($(this).attr('data-id-table'));
+                // edit user 
 
-                
-    
+                let idUser = $(this).attr('data-id-table');
+                // json obj to send with id of the user 
+                let obj = {
+                    id: idUser
+                };                
+
+                $.ajax({
+                    type: "POST",
+                    url: "editUser.php",
+                    // data: JSON.stringify(obj),
+                    data: obj,
+                    success: function(data){                        
+                        $('#txt-surname').val(data.surname);
+                        $('#txt-given-name').val(data.givenName);
+                        // data must be yyyy-mm-dd
+                        $('#txt-date-of-birth').val(data.birthDate);
+                        $('#drop-gender').val(data.gender.toUpperCase());
+                        // data must be yyyy-mm-dd
+                        $('#txt-hire-date').val(data.hireDate);
+                        $('#txt-initial-level').val(data.initialLevel);
+                        $('#employee-data').modal('show');
+                        $('#btn-submit').attr('data-id-table', idUser);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        showElement('msg-error');
+                    }
+                });
+            
             }
-           
-        });
+            e.preventDefault();
+        }
 
+
+        $('.btn-edit, .btn-create').on('click', createUpdateUser);
        
-        $("#modalForm").submit( function(event){
-		$.post("ajax.php", $(this).serialize(), onNewPost); 
-		$('#employee-data').modal('hide');
-		event.preventDefault();	 
-	    });
 
-        var onNewPost = function (response){
-            
-            if (response.status == "None") {
-                console.log(response);
-            } else {
-                if (response.status == "OK"){
-                    console.log(response);
-                }
+        $('#btn-submit').on('click', function (e) {            
+            hideElement('msg-error-modal');
+
+            if (!$('#txt-surname').val() 
+            || !$('#txt-given-name').val()
+            || !$('#txt-date-of-birth').val()
+            || !$('#drop-gender').val()
+            || !$('#txt-hire-date').val()
+            || !$('#txt-initial-level').val()
+            ) {
+                $('#msg-error-modal').text('Please fill all fields!');
+                showElement('msg-error-modal');
+                return;
+            }
+
+            // object to send by ajax            
+            let userData = {
+                surname:  $('#txt-surname').val(),
+                givenName:  $('#txt-given-name').val(),
+                birthDate:  $('#txt-date-of-birth').val(),
+                gender:  $('#drop-gender').val(),
+                hireDate:  $('#txt-hire-date').val(),
+                initialLevel:  $('#txt-initial-level').val(),
+                id: ''
             }
             
-        };
+            // check if there is an user id set            
+            let idUser = $(this).attr('data-id-table');
+            if (idUser) {
+                userData.id = idUser
 
-        $.get("ajax.php", onNewPost);   
-        
+                $.ajax({
+                type: "POST",
+                url: "saveOrUpdateUser.php",            
+                data: userData,
+                success: function(response){
+                        clearFields();
+                        const data = response.data;
+                        // update the values in the table row
+                        $('#'+ userData.id + ' td:nth-child(3)').text(data.suname);
+                        $('#'+ userData.id + ' td:nth-child(4)').text(data.givenName);
+                        $('#'+ userData.id + ' td:nth-child(5)').text(data.birthDate);
+                        $('#'+ userData.id + ' td:nth-child(6)').text(data.gender);
+                        $('#'+ userData.id + ' td:nth-child(7)').text(data.hireDate);
+                        $('#'+ userData.id + ' td:nth-child(8)').text(data.initialLevel);
+                        
+                        // hide modal
+                        $('#employee-data').modal('hide');
+                        // set the message
+                        $('#msg-success').text(response.message);
+                        showElement('msg-success');
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        showElement('msg-error');
+                    }
+                });
+            }
 
-              
+            $.ajax({
+                type: "POST",
+                url: "saveOrUpdateUser.php",            
+                data: userData,
+                success: function(response){                                           
+                    const data = response.data;
+                    // create row
+                    let row = `
+                        <tr id="${data.hr_id}">
+                            <td>
+                                <button type="button" class="btn btn-secondary btn-edit" data-id-table="${data.hr_id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                        <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"></path>
+                                    </svg>
+                                    Edit
+                                </button>
+                            </td>
+                            <td>${data.hr_id}</td>
+                            <td>${data.surname}</td>
+                            <td>${data.givenName}</td>
+                            <td>${data.birthDate}</td>
+                            <td>${data.gender}</td>
+                            <td>${data.hireDate}</td>
+                            <td>${data.initialLevel}</td>
+                        </tr>
+                    `;
+                    // parse the row to html and prepend
+                    $('#data-table-user').prepend($.parseHTML( row ));
+                    // remove previus click event
+                    $('.btn-edit, .btn-create').unbind('click');
+                    // add previus click event
+                    $('.btn-edit, .btn-create').bind('click', createUpdateUser);
+                    // hide modal
+                    $('#employee-data').modal('hide');
+                    $('#msg-success').text(response.message);
+                    showElement('msg-success');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showElement('msg-error');
+                }
+            });
+            
+            e.preventDefault();	 
+        });
     </script>
 </body>
 </html>
