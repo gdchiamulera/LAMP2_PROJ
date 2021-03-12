@@ -1,5 +1,12 @@
 <?php
-	session_start();	
+	session_start();
+	
+	if (!empty($_SESSION['userid'])) {
+			$userid=$_SESSION['userid'];
+	} else {
+			die();
+			header("Location: index.php");
+	}
 
 	$fileCreated = false;
 
