@@ -321,9 +321,8 @@
                         showElement('msg-error');
                     }
                 });
-            }
-
-            $.ajax({
+            } else {
+                $.ajax({
                 type: "POST",
                 url: "saveOrUpdateUser.php",            
                 data: userData,
@@ -362,8 +361,8 @@
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     showElement('msg-error');
-                }
-            });
+                }});
+            }
             
             e.preventDefault();	 
         });
