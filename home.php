@@ -4,8 +4,9 @@
 	if (!empty($_SESSION['userid'])) {
 			$userid=$_SESSION['userid'];
 	} else {
-			die();
+			
 			header("Location: index.php");
+			die();
 	}
 
 	$fileCreated = false;
