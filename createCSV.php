@@ -75,7 +75,7 @@
     session_start();
     $_SESSION['FILE_CREATED'] = true; 
     
-    header("Location:index.php");
+    header("Location:home.php");
     // var_dump(createSurname());
     // var_dump(createRandomGender());
     // var_dump(randomLevel());
