@@ -304,7 +304,8 @@
                         clearFields();
                         const data = response.data;
                         // update the values in the table row
-                        $('#'+ userData.id + ' td:nth-child(3)').text(data.suname);
+                        debugger;
+                        $('#'+ userData.id + ' td:nth-child(3)').text(data.surname);
                         $('#'+ userData.id + ' td:nth-child(4)').text(data.givenName);
                         $('#'+ userData.id + ' td:nth-child(5)').text(data.birthDate);
                         $('#'+ userData.id + ' td:nth-child(6)').text(data.gender);
