@@ -106,6 +106,12 @@
                                                 </svg>
                                                 Edit
                                             </button>
+                                            <button type="button" class="btn btn-secondary btn-earnings" data-id-table="<?php echo $row['hr_id'];?>">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16">
+                                                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1H4zm9 6h-3v2h3V7zm0 3h-3v2h3v-2zm0 3h-3v2h2a1 1 0 0 0 1-1v-1zm-4 2v-2H6v2h3zm-4 0v-2H3v1a1 1 0 0 0 1 1h1zm-2-3h2v-2H3v2zm0-3h2V7H3v2zm3-2v2h3V7H6zm3 3H6v2h3v-2z"/>
+                                                </svg>
+                                                Earnings
+                                            </button>
                                         </td>
                                         <td><?php echo $row['hr_id'];?> </td>
                                         <td><?php echo $row['surname'];?> </td>
@@ -134,7 +140,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="employee-data" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <!-- Employee Modal -->
+    <div class="modal fade" id="employee-data" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -182,6 +190,26 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="btn-submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings Modal -->
+    <div class="modal fade" id="earnings-data" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="earnings-data-name">Employee</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Earnings $ 0.00                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                    
                 </div>
             </div>
         </div>
@@ -263,6 +291,15 @@
 
 
         $('.btn-edit, .btn-create').on('click', createUpdateUser);
+
+        $('.btn-earnings').on('click', function () {
+            const idUser = $(this).attr('data-id-table');
+            console.log(idUser);
+            const userName = 'Test User';
+
+            $('#earnings-data-name').text(`Employee: ${userName}`)
+            $('#earnings-data').modal('show');
+        });
        
 
         $('#btn-submit').on('click', function (e) {            
@@ -337,6 +374,12 @@
                                         <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"></path>
                                     </svg>
                                     Edit
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-earnings" data-id-table="${data.hr_id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16">
+                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1H4zm9 6h-3v2h3V7zm0 3h-3v2h3v-2zm0 3h-3v2h2a1 1 0 0 0 1-1v-1zm-4 2v-2H6v2h3zm-4 0v-2H3v1a1 1 0 0 0 1 1h1zm-2-3h2v-2H3v2zm0-3h2V7H3v2zm3-2v2h3V7H6zm3 3H6v2h3v-2z"/>
+                                    </svg>
+                                    Earnings
                                 </button>
                             </td>
                             <td>${data.hr_id}</td>
