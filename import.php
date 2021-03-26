@@ -4,6 +4,9 @@ $conn = mysqli_connect("localhost", "root", "", "hr_db");
 
 if(isset($_POST["submit"])){
 
+    $sql = "DELETE FROM hr_employees";
+    mysqli_query($conn, $sql);
+
     if($_FILES['file']['name']) {
 
         $filename = explode('.',$_FILES['file']['name']);
@@ -24,6 +27,7 @@ if(isset($_POST["submit"])){
                 if ($skipLine > 1){
                     $fullName[] = ($column1 ." ". $column2);
 
+                    
                     $sql = "INSERT ignore into hr_employees(surname, givenName, birthDate, gender, hireDate, initialLevel, isFullTime) values ('$column1', '$column2', '$column3', '$column4', '$column5', '$column6', '$column7')";
                     mysqli_query($conn, $sql);
                 }
