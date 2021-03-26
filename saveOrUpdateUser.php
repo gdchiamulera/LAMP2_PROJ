@@ -9,7 +9,7 @@ if (isset($_POST['id']) && strlen(trim($_POST['id'])) > 0) {
 		// convert the data to array to the query
 		$data = setArrayData($_POST);
 		// insert the user
-		insertData('update hr_employees set surname = ?, givenName = ?, birthDate = ?, gender = ?, hireDate = ?, initialLevel = ? where hr_id = ?', $data);
+		insertData('update hr_employees set surname = ?, givenName = ?, birthDate = ?, gender = ?, hireDate = ?, initialLevel = ?, isFullTime = ? where hr_id = ?', $data);
 
 		// get the data from the user inserted
 		$user = getData('select * from hr_employees where hr_id = ?', array($_POST['id']));
@@ -28,7 +28,7 @@ if (isset($_POST['id']) && strlen(trim($_POST['id'])) > 0) {
 	try {				
 		$data = setArrayData($_POST);
 		
-		$newId = insertData('insert into hr_employees (surname, givenName, birthDate, gender, hireDate, initialLevel) values (?, ?, ?, ?, ?, ?)', $data);		
+		$newId = insertData('insert into hr_employees (surname, givenName, birthDate, gender, hireDate, initialLevel, isFullTime) values (?, ?, ?, ?, ?, ?, ?)', $data);		
 		$user = getData('select * from hr_employees where hr_id = ?', array($newId));
 		//response if ok
 		$response = array();
@@ -52,11 +52,12 @@ function setArrayData($post) {
 	$gender = addslashes(trim($post['gender']));
 	$hireDate = addslashes(trim($post['hireDate']));
 	$initialLevel = addslashes(trim($post['initialLevel']));
+	$isFullTime = addslashes(trim($post['isFullTime']));
 
 	if (isset($post['id']) && strlen(trim($_POST['id'])) > 0) {
 		$id = addslashes(trim($post['id']));
-		return array($surname, $givenName, $birthDate, $gender, $hireDate, $initialLevel, $id);
+		return array($surname, $givenName, $birthDate, $gender, $hireDate, $initialLevel, $isFullTime, $id);
 	} 
-	return array($surname, $givenName, $birthDate, $gender, $hireDate, $initialLevel);
+	return array($surname, $givenName, $birthDate, $gender, $hireDate, $initialLevel, $isFullTime);
 }
 ?>
