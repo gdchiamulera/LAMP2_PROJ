@@ -59,14 +59,18 @@
     function createRandomLevel () {
         return rand(1, 9);
     }
+
+    function createIsFullTime() {
+        return rand(0, 1);
+    }
     
     $myfile = fopen("newfile.csv", "w") or die("Unable to open file!");
     
-    $content = "Surname,GivenName,BithDate,Gender,HireDate,InitialLevel\r\n";
+    $content = "Surname,GivenName,BithDate,Gender,HireDate,InitialLevel,isFullTime\r\n";
 
     for($i=0; $i < 400; $i++){
-        // Surname,GivenName,BithDate,Gender,HireDate,InitialLevel
-        $content.= createSurname().','.createGivenName().','.randomDate('2002-02-01').','.createRandomGender().','.randomDate(null).','.createRandomLevel()."\r\n";
+        // Surname,GivenName,BithDate,Gender,HireDate,InitialLevel,isFullTime
+        $content.= createSurname().','.createGivenName().','.randomDate('2002-02-01').','.createRandomGender().','.randomDate(null).','.createRandomLevel().','.createIsFullTime()."\r\n";
     }
 
     fwrite($myfile, $content);    
