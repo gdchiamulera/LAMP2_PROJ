@@ -19,11 +19,12 @@ if(isset($_POST["submit"])){
                 $column4 = mysqli_real_escape_string($conn, $data[3]);
                 $column5 = mysqli_real_escape_string($conn, $data[4]);
                 $column6 = mysqli_real_escape_string($conn, $data[5]);
+                $column7 = mysqli_real_escape_string($conn, $data[6]);
                 
                 if ($skipLine > 1){
                     $fullName[] = ($column1 ." ". $column2);
 
-                    $sql = "INSERT ignore into hr_employees(surname, givenName, birthDate, gender, hireDate, initialLevel) values('$column1', '$column2', '$column3', '$column4', '$column5', '$column6')";
+                    $sql = "INSERT ignore into hr_employees(surname, givenName, birthDate, gender, hireDate, initialLevel, isFullTime) values ('$column1', '$column2', '$column3', '$column4', '$column5', '$column6', '$column7')";
                     mysqli_query($conn, $sql);
                 }
             }
