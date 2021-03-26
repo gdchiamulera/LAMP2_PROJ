@@ -42,7 +42,7 @@ if(isset($_POST["submit"])){
             $_SESSION['FILE_UPLOAD'] = true; 
             $_SESSION['DUPLICATED'] = $duplicated;
 
-            header("Location:index.php");
+            header("Location:home.php");
 
         }
     }
