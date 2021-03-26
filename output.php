@@ -83,6 +83,7 @@
                                 <th class="border-style">Gender</th>
                                 <th class="border-style">Hire Date</th>
                                 <th class="border-style">Initial Level</th>
+                                <th class="border-style">Work Type</th>
                             </tr>
                         </thead>
                         <tbody id="data-table-user">
@@ -120,6 +121,7 @@
                                         <td><?php echo $row['gender'];?> </td>
                                         <td><?php echo $row['hireDate'];?> </td>
                                         <td><?php echo $row['initialLevel'];?> </td>
+                                        <td><?php echo $row['isFullTime'] ? 'Full Time' : 'Part Time' ;?> </td>
                                     </tr>
 
                             <?php
@@ -175,6 +177,13 @@
                         <select id="drop-gender" name="drop-gender" class="form-control">
                             <option value="F">Female</option>
                             <option value="M">Male</option>
+                        </select>                        
+                    </div>
+                    <div class="form-group">
+                        <label for="drop-work-type">Work Type</label>
+                        <select id="drop-work-type" name="drop-work-type" class="form-control">
+                            <option value="true">Full Time</option>
+                            <option value="false">Part Time</option>
                         </select>                        
                     </div>
                     <div class="form-group">
@@ -243,6 +252,7 @@
             // data must be yyyy-mm-dd
             $('#txt-date-of-birth').val('');
             $('#drop-gender').val('F');
+            $('#drop-work-type').val('true');
             // data must be yyyy-mm-dd
             $('#txt-hire-date').val('');
             $('#txt-initial-level').val('');
@@ -268,12 +278,13 @@
                     url: "editUser.php",
                     // data: JSON.stringify(obj),
                     data: obj,
-                    success: function(data){                        
+                    success: function(data){  
                         $('#txt-surname').val(data.surname);
                         $('#txt-given-name').val(data.givenName);
                         // data must be yyyy-mm-dd
                         $('#txt-date-of-birth').val(data.birthDate);
-                        $('#drop-gender').val(data.gender.toUpperCase());
+                        $('#drop-gender').val(data.gender.toUpperCase());                        
+                        $('#drop-work-type').val(parseInt(data.isFullTime) ? 'true' : 'false');
                         // data must be yyyy-mm-dd
                         $('#txt-hire-date').val(data.hireDate);
                         $('#txt-initial-level').val(data.initialLevel);
@@ -311,6 +322,7 @@
             || !$('#drop-gender').val()
             || !$('#txt-hire-date').val()
             || !$('#txt-initial-level').val()
+            || !$('#drop-work-type').val()
             ) {
                 $('#msg-error-modal').text('Please fill all fields!');
                 showElement('msg-error-modal');
@@ -325,14 +337,14 @@
                 gender:  $('#drop-gender').val(),
                 hireDate:  $('#txt-hire-date').val(),
                 initialLevel:  $('#txt-initial-level').val(),
+                isFullTime: $('#drop-work-type').val() == 'true' ? 1 : 0,
                 id: ''
             }
             
             // check if there is an user id set            
             let idUser = $(this).attr('data-id-table');
             if (idUser) {
-                userData.id = idUser
-
+                userData.id = idUser;                
                 $.ajax({
                 type: "POST",
                 url: "saveOrUpdateUser.php",            
@@ -340,6 +352,7 @@
                 success: function(response){
                         clearFields();
                         const data = response.data;
+                        
                         // update the values in the table row
                         $('#'+ userData.id + ' td:nth-child(3)').text(data.surname);
                         $('#'+ userData.id + ' td:nth-child(4)').text(data.givenName);
@@ -347,6 +360,7 @@
                         $('#'+ userData.id + ' td:nth-child(6)').text(data.gender);
                         $('#'+ userData.id + ' td:nth-child(7)').text(data.hireDate);
                         $('#'+ userData.id + ' td:nth-child(8)').text(data.initialLevel);
+                        $('#'+ userData.id + ' td:nth-child(9)').text(parseInt(data.isFullTime) ? 'Full Time' : 'Part Time');
                         
                         // hide modal
                         $('#employee-data').modal('hide');
@@ -355,6 +369,7 @@
                         showElement('msg-success');
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(XMLHttpRequest, textStatus, errorThrown);
                         showElement('msg-error');
                     }
                 });
@@ -366,6 +381,7 @@
                 success: function(response){                                           
                     const data = response.data;
                     // create row
+                    let workType = parseInt(data.isFullTime) ? 'Full Time' : 'Part Time';
                     let row = `
                         <tr id="${data.hr_id}">
                             <td>
@@ -389,6 +405,7 @@
                             <td>${data.gender}</td>
                             <td>${data.hireDate}</td>
                             <td>${data.initialLevel}</td>
+                            <td>${workType}</td>
                         </tr>
                     `;
                     // parse the row to html and prepend
