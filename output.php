@@ -214,8 +214,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    Earnings $ 0.00                    
+                <div class="modal-body" id="earnings-data-schedule">
+                                     
+                </div>
+                <div class="modal-body" id="earnings-data-output">
+                                 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                    
@@ -299,17 +302,97 @@
             }
             e.preventDefault();
         }
+////////////////////////////////////////////////
+        function showEarnings (e) {
+            hideElement('msg-error-modal');
+            // check if is a new user
+            if ($(this).hasClass('btn-create')) {               
+                clearFields();                
+                $('#employee-data').modal('show');
+            } else {
+                // edit user 
 
+                let idUser = $(this).attr('data-id-table');
+                // json obj to send with id of the user 
+                let obj = {
+                    id: idUser
+                };                
 
+                $.ajax({
+                    type: "POST",
+                    url: "editUser.php",
+                    // data: JSON.stringify(obj),
+                    data: obj,
+                    success: function(data){  
+                        $('#txt-surname').val(data.surname);
+                        $('#txt-given-name').val(data.givenName);
+                        // data must be yyyy-mm-dd
+                        $('#txt-date-of-birth').val(data.birthDate);
+                        $('#drop-gender').val(data.gender.toUpperCase());                        
+                        $('#drop-work-type').val(parseInt(data.isFullTime) ? 'true' : 'false');
+                        // data must be yyyy-mm-dd
+                        $('#txt-hire-date').val(data.hireDate);
+                        $('#txt-initial-level').val(data.initialLevel);
+                        $('#employee-data').modal('show');
+                        $('#btn-submit').attr('data-id-table', idUser);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        showElement('msg-error');
+                    }
+                });
+            
+            }
+            e.preventDefault();
+        }
+////////////////////////////////////////////////
         $('.btn-edit, .btn-create').on('click', createUpdateUser);
 
         $('.btn-earnings').on('click', function () {
-            const idUser = $(this).attr('data-id-table');
-            console.log(idUser);
-            const userName = 'Test User';
+                let idUser = $(this).attr('data-id-table');
+                
+                // json obj to send with id of the user 
+                let obj = {
+                    id: idUser
+                };                
 
-            $('#earnings-data-name').text(`Employee: ${userName}`)
-            $('#earnings-data').modal('show');
+                $.ajax({
+                    type: "POST",
+                    url: "calculateEarnings.php",
+                    // data: JSON.stringify(obj),
+                    data: obj,
+                    success: function(data){
+                        $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
+                        var isFullTime = data.isFullTime;
+                        var output = '';
+                        var schedule = '';
+                        //If Part-Time
+                        if (isFullTime == 0){
+                            schedule = "Part-Time";
+
+
+                            output = data.salary;
+                        }
+                        //If Full-Time
+                        else{
+                            schedule = "Full-Time";
+
+
+                            output = data.salary;
+                        }
+                        $('#earnings-data-schedule').text(`Schedule: ${schedule}`);
+                        $('#earnings-data-output').text(`$${output}`);
+                        $('#earnings-data').modal('show');
+                        console.log(data);
+                        
+                     
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        showElement('msg-error');
+                    }
+                });
+
+
+   
         });
        
 
