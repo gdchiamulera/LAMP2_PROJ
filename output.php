@@ -215,10 +215,10 @@
                     </button>
                 </div>
                 <div class="modal-body" id="earnings-data-schedule">
-                                     
+                    Earnings $ 0.00                    
                 </div>
                 <div class="modal-body" id="earnings-data-output">
-                                 
+                    Earnings $ 0.00                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                    
@@ -361,28 +361,15 @@
                     // data: JSON.stringify(obj),
                     data: obj,
                     success: function(data){
-                        $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
-                        var isFullTime = data.isFullTime;
-                        var output = '';
-                        var schedule = '';
-                        //If Part-Time
-                        if (isFullTime == 0){
-                            schedule = "Part-Time";
-
-
-                            output = data.salary;
-                        }
-                        //If Full-Time
-                        else{
-                            schedule = "Full-Time";
-
-
-                            output = data.salary;
-                        }
+                        console.log(data);
+                        $('#earnings-data-name').text(`Employee: ${data[0].givenName} ${data[0].surname}`);
+                        var isFullTime = data[0].isFullTime;
+                        var output = `${data[0].salary}`;
+                        var schedule = '';                        
                         $('#earnings-data-schedule').text(`Schedule: ${schedule}`);
                         $('#earnings-data-output').text(`$${output}`);
                         $('#earnings-data').modal('show');
-                        console.log(data);
+                       // console.log(data);
                         
                      
                     },
