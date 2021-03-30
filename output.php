@@ -105,12 +105,14 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
                                                     <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                                                 </svg>
+                                                <span class="spinner-border spinner-border-sm btn-edit-spiner hide-element" role="status" aria-hidden="true"></span>
                                                 Edit
                                             </button>
                                             <button type="button" class="btn btn-secondary btn-earnings" data-id-table="<?php echo $row['hr_id'];?>">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16">
                                                     <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1H4zm9 6h-3v2h3V7zm0 3h-3v2h3v-2zm0 3h-3v2h2a1 1 0 0 0 1-1v-1zm-4 2v-2H6v2h3zm-4 0v-2H3v1a1 1 0 0 0 1 1h1zm-2-3h2v-2H3v2zm0-3h2V7H3v2zm3-2v2h3V7H6zm3 3H6v2h3v-2z"/>
                                                 </svg>
+                                                <span class="spinner-border spinner-border-sm btn-earning-spiner hide-element" role="status" aria-hidden="true"></span>
                                                 Earnings
                                             </button>
                                         </td>
@@ -198,7 +200,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btn-submit">Submit</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit">
+                        <span class="spinner-border spinner-border-sm btn-submit-spiner hide-element" role="status" aria-hidden="true"></span>
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>
@@ -215,11 +220,25 @@
                     </button>
                 </div>
                 <div class="modal-body" id="earnings-data-schedule">
-                                     
-                </div>
-                <div class="modal-body" id="earnings-data-output">
-                                 
-                </div>
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Start Period</th>
+                                <th>End of Period</th>
+                                <th class="text-right">Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody id="earnings-data-table">
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><strong>Total</strong></td>                                
+                                <td id="earning-data-total" class="text-right"></td>
+                            </tr>
+                        </tfoot>
+                    </table>                                     
+                </div>                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                    
                 </div>
@@ -231,6 +250,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     
     <script>
+        function populateTableEarnings(data) {
+            console.log(data);
+            $.each(data.payHistory, (index, element) => {                
+                const row = `
+                <tr>
+                    <td>${element.startDate}</td>
+                    <td>${element.endDate}</td>
+                    <td class="text-right">${element.salary}</td>
+                </tr>
+                `;
+                // parse the row to html and prepend
+                $('#earnings-data-table').append($.parseHTML( row ));
+            });
+            $('#earning-data-total').text(data.totalSalary);
+        }
+
         function showElement(elementSelector) {
             const element = document.getElementById(elementSelector);
 
@@ -269,13 +304,15 @@
                 $('#employee-data').modal('show');
             } else {
                 // edit user 
-
+                
                 let idUser = $(this).attr('data-id-table');
                 // json obj to send with id of the user 
                 let obj = {
                     id: idUser
                 };                
-
+                const spinner = $(this).children().eq(1);
+                spinner.removeClass('hide-element');
+                
                 $.ajax({
                     type: "POST",
                     url: "editUser.php",
@@ -291,6 +328,7 @@
                         // data must be yyyy-mm-dd
                         $('#txt-hire-date').val(data.hireDate);
                         $('#txt-initial-level').val(data.initialLevel);
+                        spinner.addClass('hide-element');
                         $('#employee-data').modal('show');
                         $('#btn-submit').attr('data-id-table', idUser);
                     },
@@ -302,97 +340,34 @@
             }
             e.preventDefault();
         }
-////////////////////////////////////////////////
-        function showEarnings (e) {
-            hideElement('msg-error-modal');
-            // check if is a new user
-            if ($(this).hasClass('btn-create')) {               
-                clearFields();                
-                $('#employee-data').modal('show');
-            } else {
-                // edit user 
 
-                let idUser = $(this).attr('data-id-table');
-                // json obj to send with id of the user 
-                let obj = {
-                    id: idUser
-                };                
-
-                $.ajax({
-                    type: "POST",
-                    url: "editUser.php",
-                    // data: JSON.stringify(obj),
-                    data: obj,
-                    success: function(data){  
-                        $('#txt-surname').val(data.surname);
-                        $('#txt-given-name').val(data.givenName);
-                        // data must be yyyy-mm-dd
-                        $('#txt-date-of-birth').val(data.birthDate);
-                        $('#drop-gender').val(data.gender.toUpperCase());                        
-                        $('#drop-work-type').val(parseInt(data.isFullTime) ? 'true' : 'false');
-                        // data must be yyyy-mm-dd
-                        $('#txt-hire-date').val(data.hireDate);
-                        $('#txt-initial-level').val(data.initialLevel);
-                        $('#employee-data').modal('show');
-                        $('#btn-submit').attr('data-id-table', idUser);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        showElement('msg-error');
-                    }
-                });
-            
-            }
-            e.preventDefault();
-        }
-////////////////////////////////////////////////
         $('.btn-edit, .btn-create').on('click', createUpdateUser);
 
         $('.btn-earnings').on('click', function () {
-                let idUser = $(this).attr('data-id-table');
-                
-                // json obj to send with id of the user 
-                let obj = {
-                    id: idUser
-                };                
-
-                $.ajax({
-                    type: "POST",
-                    url: "calculateEarnings.php",
-                    // data: JSON.stringify(obj),
-                    data: obj,
-                    success: function(data){
-                        $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
-                        var isFullTime = data.isFullTime;
-                        var output = '';
-                        var schedule = '';
-                        //If Part-Time
-                        if (isFullTime == 0){
-                            schedule = "Part-Time";
-
-
-                            output = data.salary;
-                        }
-                        //If Full-Time
-                        else{
-                            schedule = "Full-Time";
-
-
-                            output = data.salary;
-                        }
-                        $('#earnings-data-schedule').text(`Schedule: ${schedule}`);
-                        $('#earnings-data-output').text(`$${output}`);
-                        $('#earnings-data').modal('show');
-                        console.log(data);
-                        
-                     
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        showElement('msg-error');
-                    }
-                });
-
-
-   
+            let idUser = $(this).attr('data-id-table');
+            
+            // json obj to send with id of the user 
+            let obj = {
+                id: idUser
+            };                
+            const spinner = $(this).children().eq(1);
+            spinner.removeClass('hide-element');
+            $.ajax({
+                type: "POST",
+                url: "calculateEarnings.php",
+                data: JSON.stringify(obj),
+                data: obj,
+                success: function(data){
+                    $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
+                    populateTableEarnings(data);
+                    spinner.addClass('hide-element');
+                    $('#earnings-data').modal('show');                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showElement('msg-error');
+                    console.log(XMLHttpRequest, textStatus, errorThrown);
+                }
+            });
         });
        
 
@@ -466,18 +441,20 @@
                     // create row
                     let workType = parseInt(data.isFullTime) ? 'Full Time' : 'Part Time';
                     let row = `
-                        <tr id="${data.hr_id}">
+                        <tr id="${data.hr_id}">                            
                             <td>
                                 <button type="button" class="btn btn-secondary btn-edit" data-id-table="${data.hr_id}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
-                                        <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"></path>
+                                        <path d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                                     </svg>
+                                    <span class="spinner-border spinner-border-sm btn-edit-spiner hide-element" role="status" aria-hidden="true"></span>
                                     Edit
                                 </button>
                                 <button type="button" class="btn btn-secondary btn-earnings" data-id-table="${data.hr_id}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16">
                                         <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1H4zm9 6h-3v2h3V7zm0 3h-3v2h3v-2zm0 3h-3v2h2a1 1 0 0 0 1-1v-1zm-4 2v-2H6v2h3zm-4 0v-2H3v1a1 1 0 0 0 1 1h1zm-2-3h2v-2H3v2zm0-3h2V7H3v2zm3-2v2h3V7H6zm3 3H6v2h3v-2z"/>
                                     </svg>
+                                    <span class="spinner-border spinner-border-sm btn-earning-spiner hide-element" role="status" aria-hidden="true"></span>
                                     Earnings
                                 </button>
                             </td>
