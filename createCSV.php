@@ -43,7 +43,7 @@
         // Convert to timetamps
         $min = strtotime('1990-01-01');
         if ($endDate == null) {
-            $max = strtotime('2021-02-11');
+            $max = strtotime('2021-03-30');
         } else {
             $max = strtotime($endDate);
         }
@@ -57,7 +57,7 @@
     }
 
     function createRandomLevel () {
-        return rand(1, 9);
+        return rand(1, 5);
     }
 
     function createIsFullTime() {

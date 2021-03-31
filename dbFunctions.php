@@ -1,6 +1,8 @@
 <?php
+
+require_once('./dbConnection.php');
+
 function getData ($query, $data) {
-	require_once('./dbConnection.php');
 
 	$db_conn = connectDB();
 
@@ -21,8 +23,6 @@ function getData ($query, $data) {
 }
 
 function getMultipleData ($query, $data) {
-	require_once('./dbConnection.php');
-
 	$db_conn = connectDB();
 
 	$stmt = $db_conn->prepare($query);
@@ -48,8 +48,6 @@ function getMultipleData ($query, $data) {
 }
 
 function insertData ($query, $data) {
-	require_once('./dbConnection.php');
-
 	$db_conn = connectDB();
 	
 	$stmt = $db_conn->prepare($query);

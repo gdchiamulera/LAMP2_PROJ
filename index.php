@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!empty($_SESSION['userid'])) {
+	header("Location: home.php");
+	die();
+} 
+
 $loginFail = false;
 
 $error = '';
