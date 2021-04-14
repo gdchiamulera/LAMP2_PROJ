@@ -1,4 +1,13 @@
 <?php
+
+if (empty($_SERVER['HTTPS'])) {
+
+	header('Location: https://localhost/lamp/index.php');
+	
+	die();
+	
+}
+
 session_start();
 
 if (!empty($_SESSION['userid'])) {
