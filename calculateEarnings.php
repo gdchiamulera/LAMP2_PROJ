@@ -26,7 +26,7 @@ if (isset($_POST['id'])) {
       if (strtotime($start_date) < strtotime($end_date)) {			
          $salaryHistory['payHistory'][] = creteNewPayHistory($start_date, $end_date, $actualSalary['salary'], $user['isFullTime'], $iteration, $initialLevel);		
          
-         $totalSalary += $salaryHistory['payHistory'][count($salaryHistory) - 1]['salary'];
+         $totalSalary += $salaryHistory['payHistory'][count($salaryHistory['payHistory']) - 1]['salary'];
       }
       
       if ($iteration == 1) {

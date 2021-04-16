@@ -1,6 +1,6 @@
 <?php
 
-	$idUser = 403;
+	$idUser = 401;
 	// $idUser = 2806;
 
 
@@ -22,10 +22,11 @@
 		$actualSalary = getData('select salary from salary where date_begin <= ? and date_end >= ? and level = ? ', array($start_date, $start_date, $initialLevel));		
 		
 		if (strtotime($start_date) < strtotime($end_date)) {			
-			$salaryHistory['payHistory'][] = creteNewPayHistory($start_date, $end_date, $actualSalary['salary'], $user['isFullTime'], $iteration, $initialLevel);		
-			
-			$totalSalary += $salaryHistory['payHistory'][count($salaryHistory) - 1]['salary'];
+			$salaryHistory['payHistory'][] = creteNewPayHistory($start_date, $end_date, $actualSalary['salary'], $user['isFullTime'], $iteration, $initialLevel);					
+			$totalSalary += $salaryHistory['payHistory'][count($salaryHistory['payHistory']) - 1]['salary'];
 		}
+
+		
 		
 		if ($iteration == 1) {
 			$start_date = getFirstDate($start_date);
