@@ -5,7 +5,7 @@ if (empty($_SERVER['HTTPS'])) {
 	$host  = $_SERVER['HTTPS'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 	$extra = 'index.php';
-	header("Location: http://$host$uri/$extra");
+	header("Location: https://$host$uri/$extra");
 	
 	die();
 	

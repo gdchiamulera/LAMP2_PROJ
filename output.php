@@ -233,6 +233,7 @@
                             <tr>
                                 <th>Start Period</th>
                                 <th>End of Period</th>
+                                <th>Level</th>
                                 <th class="text-right">Salary</th>
                             </tr>
                         </thead>
@@ -241,7 +242,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="2"><strong>Total</strong></td>                                
+                                <td colspan="3"><strong>Total</strong></td>                                
                                 <td id="earning-data-total" class="text-right"></td>
                             </tr>
                         </tfoot>
@@ -254,7 +255,7 @@
         </div>
     </div>    
 
-    <!-- Retirement Modal - Thalis-->
+    <!-- Retirement Modal -->
     <div class="modal fade" id="retire-data" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -292,13 +293,14 @@
     
     <script>
         function populateTableEarnings(data) {
-            console.log(data);
+            // console.log(data);
             $('#earnings-data-table').empty();
             $.each(data.payHistory, (index, element) => {                
                 const row = `
                 <tr>
                     <td>${element.startDate}</td>
                     <td>${element.endDate}</td>
+                    <td>${element.level}</td>
                     <td class="text-right">$${element.salary}</td>
                 </tr>
                 `;
@@ -306,10 +308,14 @@
                 
                 $('#earnings-data-table').append($.parseHTML( row ));
             });
-            $('#earning-data-total').text('$' + data.totalSalary);
+            if (data.isFullTime) {
+                $('#earning-data-total').text('$' + data.totalSalary);
+            } else {
+                $('#earning-data-total').text('####');
+            }
         }
 
-        //Test - Thalis
+        
         function populateTableRetire(data) {
             console.log(data);
                            
@@ -331,8 +337,6 @@
                 //Append elegible feedback
                 $('#retire-data-elegible').empty();
                 $('#retire-data-elegible').append($.parseHTML( retireReturn ));
-
-               
         }
 
         function showElement(elementSelector) {
@@ -440,8 +444,6 @@
                 }
             });
         });
-
-        //Retirement Test - Thalis
 
         $('.btn-retire').on('click', function () {
             let idUser = $(this).attr('data-id-table');
