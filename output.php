@@ -292,6 +292,61 @@
     <script src="js/bootstrap.bundle.min.js" ></script>
     
     <script>
+        function getEarning () {            
+            let idUser = $(this).attr('data-id-table');
+            
+            // json obj to send with id of the user 
+            let obj = {
+                id: idUser
+            };                
+            const spinner = $(this).children().eq(1);
+            spinner.removeClass('hide-element');
+            $.ajax({
+                type: "POST",
+                url: "calculateEarnings.php",
+                data: JSON.stringify(obj),
+                data: obj,
+                success: function(data){
+                    $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
+                    populateTableEarnings(data);
+                    spinner.addClass('hide-element');
+                    $('#earnings-data').modal('show');                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showElement('msg-error');
+                    console.log(XMLHttpRequest, textStatus, errorThrown);
+                }
+            });        
+        }
+
+        function getRetirementData () {
+            let idUser = $(this).attr('data-id-table');
+            
+            // json obj to send with id of the user 
+            let obj = {
+                id: idUser
+            };  
+            console.log(obj);              
+            const spinner = $(this).children().eq(1);
+            spinner.removeClass('hide-element');
+            $.ajax({
+                type: "POST",
+                url: "retirement.php",
+                data: JSON.stringify(obj),
+                data: obj,
+                success: function(data){
+                    $('#retire-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
+                    populateTableRetire(data);
+                    spinner.addClass('hide-element');
+                    $('#retire-data').modal('show');                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showElement('msg-error');
+                    console.log(XMLHttpRequest, textStatus, errorThrown);
+                }
+            });
+        }
+        
         function populateTableEarnings(data) {
             // console.log(data);
             $('#earnings-data-table').empty();
@@ -415,63 +470,10 @@
         }
 
         $('.btn-edit, .btn-create').on('click', createUpdateUser);
+        
+        $('.btn-earnings').on('click', getEarning);
 
-       
-
-        $('.btn-earnings').on('click', function () {
-            let idUser = $(this).attr('data-id-table');
-            
-            // json obj to send with id of the user 
-            let obj = {
-                id: idUser
-            };                
-            const spinner = $(this).children().eq(1);
-            spinner.removeClass('hide-element');
-            $.ajax({
-                type: "POST",
-                url: "calculateEarnings.php",
-                data: JSON.stringify(obj),
-                data: obj,
-                success: function(data){
-                    $('#earnings-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
-                    populateTableEarnings(data);
-                    spinner.addClass('hide-element');
-                    $('#earnings-data').modal('show');                    
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    showElement('msg-error');
-                    console.log(XMLHttpRequest, textStatus, errorThrown);
-                }
-            });
-        });
-
-        $('.btn-retire').on('click', function () {
-            let idUser = $(this).attr('data-id-table');
-            
-            // json obj to send with id of the user 
-            let obj = {
-                id: idUser
-            };  
-            console.log(obj);              
-            const spinner = $(this).children().eq(1);
-            spinner.removeClass('hide-element');
-            $.ajax({
-                type: "POST",
-                url: "retirement.php",
-                data: JSON.stringify(obj),
-                data: obj,
-                success: function(data){
-                    $('#retire-data-name').text(`Employee: ${data.givenName} ${data.surname}`);
-                    populateTableRetire(data);
-                    spinner.addClass('hide-element');
-                    $('#retire-data').modal('show');                    
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    showElement('msg-error');
-                    console.log(XMLHttpRequest, textStatus, errorThrown);
-                }
-            });
-        });
+        $('.btn-retire').on('click', getRetirementData);
 
        
 
@@ -561,6 +563,13 @@
                                     <span class="spinner-border spinner-border-sm btn-earning-spiner hide-element" role="status" aria-hidden="true"></span>
                                     Earnings
                                 </button>
+                                <button type="button" class="btn btn-secondary btn-retire" data-id-table="${data.hr_id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-spreadsheet" viewBox="0 0 16 16">
+                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v4h10V2a1 1 0 0 0-1-1H4zm9 6h-3v2h3V7zm0 3h-3v2h3v-2zm0 3h-3v2h2a1 1 0 0 0 1-1v-1zm-4 2v-2H6v2h3zm-4 0v-2H3v1a1 1 0 0 0 1 1h1zm-2-3h2v-2H3v2zm0-3h2V7H3v2zm3-2v2h3V7H6zm3 3H6v2h3v-2z"/>
+                                    </svg>
+                                    <span class="spinner-border spinner-border-sm btn-retire-spiner hide-element" role="status" aria-hidden="true"></span>
+                                    Retirement
+                                </button>
                             </td>
                             <td>${data.hr_id}</td>
                             <td>${data.surname}</td>
@@ -575,9 +584,11 @@
                     // parse the row to html and prepend
                     $('#data-table-user').prepend($.parseHTML( row ));
                     // remove previus click event
-                    $('.btn-edit, .btn-create').unbind('click');
+                    $('.btn-edit, .btn-create, .btn-earnings, .btn-retire').unbind('click');
                     // add previus click event
                     $('.btn-edit, .btn-create').bind('click', createUpdateUser);
+                    $('.btn-earnings').bind('click', getEarning);
+                    $('.btn-retire').bind('click', getRetirementData);
                     // hide modal
                     $('#employee-data').modal('hide');
                     $('#msg-success').text(response.message);
